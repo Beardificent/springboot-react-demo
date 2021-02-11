@@ -1,0 +1,3 @@
+[submodule "springboot-react-demo-ui"]
+	path = springboot-react-demo-ui
+	url = git@github.com:Beardificent/springboot-react-demo-ui.git
