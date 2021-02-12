@@ -2,6 +2,7 @@ package com.example.demo.student;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,7 +22,12 @@ public class StudentDataAccessService {
     public List<Student> selectAllStudents() {
 
         String sql = "" + "SELECT student_id," + "first_name, " + "last_name, " + "email, " + "gender " + "FROM student";
-        return jdbcTemplate.query(sql, (resultSet, i) -> {
+        return jdbcTemplate.query(sql, getStudentRowMapper());
+
+    }
+
+    private RowMapper<Student> getStudentRowMapper() {
+        return (resultSet, i) -> {
             String studentId = resultSet.getString("student_id");
             UUID studentIdUUID = UUID.fromString(studentId);
             String first_name = resultSet.getString("first_name");
@@ -30,7 +36,6 @@ public class StudentDataAccessService {
             String genderString = resultSet.getString("gender").toUpperCase();
             Student.Gender gender = Student.Gender.valueOf(genderString);
             return new Student(studentIdUUID, first_name, last_name, email, gender);
-        });
-
+        };
     }
 }
